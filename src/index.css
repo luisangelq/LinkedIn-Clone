@@ -1,6 +1,6 @@
 body {
-  overflow-y: scroll;
   overflow-x: hidden;
+  font-family: 'Arial', sans-serif;
 }
 
 :root,
@@ -8,7 +8,7 @@ body,
 html {
   background-color: #f5f5f5;
   box-sizing: border-box;
-  margin: auto 2%;
+  
 }
 
 div,
@@ -27,7 +27,8 @@ nav,
 p,
 small,
 span,
-ul {
+ul,
+input {
   margin: 0;
   padding: 0;
   border: 0;
@@ -37,7 +38,8 @@ ul {
   background: transparent;
 }
 
-body {
-  font-family: 'Arial', sans-serif;
-  
+button, a {
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }

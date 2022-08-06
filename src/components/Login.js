@@ -17,12 +17,18 @@ const Login = () => {
 
       <Section>
         <Hero>
-          <h1>Welcome to your prodessional comunity </h1>
+          <h1>Welcome to your professional comunity </h1>
+
+          <img src="/images/login-hero.svg" alt="Illustration" />
         </Hero>
+
+        <Form>
+          <Google>
+            <img src="/images/google.svg" alt="Google" />
+            <span>Sign in with Google</span>
+          </Google>
+        </Form>
       </Section>
-
-
-
     </Container>
   );
 };
@@ -37,6 +43,7 @@ const Nav = styled.nav`
   max-width: 1128px;
   margin: auto;
   padding: 1rem 0;
+  white-space: nowrap;
 
   & > a {
     width: 135px;
@@ -54,6 +61,8 @@ const Join = styled.a`
   color: rgba(0, 0, 0, 0.6);
   margin-right: 12px;
   border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.08);
@@ -82,7 +91,7 @@ const Section = styled.section`
   display: flex;
   align-content: flex-start;
   min-height: 700px;
-  padding: 40px 0 138px 0;
+  padding: 40px 0;
   position: relative;
   flex-wrap: wrap;
   width: 100%;
@@ -97,15 +106,75 @@ const Section = styled.section`
 `;
 
 const Hero = styled.div`
+  display: flex;
+  margin-left: 50px;
   width: 100%;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+  }
+
   h1 {
-    width: 55%;
+    width: 68%;
     font-size: 56px;
     color: #2977c9;
     font-weight: 200;
     text-align: start;
     line-height: 70px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      font-size: 36px;
+      text-align: center;
+      line-height: 50px;
+    }
   }
-`
+
+  img {
+    margin-top: 2rem;
+    width: 80%;
+
+    @media (min-width: 769px) {
+      width: 700px;
+      position: absolute;
+
+      top: 100px;
+      right: -250px;
+    }
+  }
+`;
+
+const Form = styled.div`
+  margin-top: 110px;
+  width: 30%;
+  margin-left: 50px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: 50px;
+    margin-left: 0;
+  }
+`;
+const Google = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: #fff;
+  border: 2px solid #ebebeb;
+  padding: 1rem;
+  border-radius: 28px;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.6);
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(207, 207, 207, 0.25);
+    color: rgba(0, 0, 0, 0.8);
+  }
+`;
 export default Login;
