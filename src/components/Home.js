@@ -65,7 +65,7 @@ const Section = styled.div`
 
 const Layout = styled.div`
   display: grid;
-  grid-template-areas: "LeftSide Main RigthSide";
+  grid-template-areas: "LeftSide Main RightSide";
   grid-template-columns: 1.5fr 3.5fr 2fr;
   gap: 25px;
 

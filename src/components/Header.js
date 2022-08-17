@@ -46,7 +46,7 @@ const Header = () => {
 
             <User>
               
-              <a href="#">
+              <a>
                 <img src="/images/user.svg" alt="UserIcon" />
                 <div>
                   <span>Me</span>
@@ -55,13 +55,13 @@ const Header = () => {
               </a>
 
               <SignOut>
-                <a href="/#">Sign Out</a>
+                <a>Sign Out</a>
               </SignOut>
             </User>
 
             <Work>
               
-              <a href="/#">
+              <a href="#">
                 <img src="/images/nav-work.svg" alt="WorkIcon" />
                 <div>
                   <span>Work</span>
