@@ -5,41 +5,41 @@ const Header = () => {
     <Container>
       <Content>
         <Logo href="/home">
-          <img src="/images/home-logo.svg" alt="LinkedIn" />
+          <img src="/images/header/home-logo.svg" alt="LinkedIn" />
         </Logo>
         <Search>
-          <img src="/images/search-icon.svg" alt="Search" />
+          <img src="/images/header/search-icon.svg" alt="Search" />
           <input type="text" placeholder="Search" />
         </Search>
         <Nav>
           <NavListWrap>
             <NavList className="active">
               <a href="/#">
-                <img src="/images/nav-home.svg" alt="Notification" />
+                <img src="/images/header/nav-home.svg" alt="Notification" />
                 <span>Home</span>
               </a>
             </NavList>
             <NavList>
               <a href="/#">
-                <img src="/images/nav-network.svg" alt="Notification" />
+                <img src="/images/header/nav-network.svg" alt="Notification" />
                 <span>My Network</span>
               </a>
             </NavList>
             <NavList>
               <a href="/#">
-                <img src="/images/nav-jobs.svg" alt="Notification" />
+                <img src="/images/header/nav-jobs.svg" alt="Notification" />
                 <span>Jobs</span>
               </a>
             </NavList>
             <NavList>
               <a href="/#">
-                <img src="/images/nav-messaging.svg" alt="Notification" />
+                <img src="/images/header/nav-messaging.svg" alt="Notification" />
                 <span>Messages</span>
               </a>
             </NavList>
             <NavList>
               <a href="/#">
-                <img src="/images/nav-notifications.svg" alt="Notification" />
+                <img src="/images/header/nav-notifications.svg" alt="Notification" />
                 <span>Notifications</span>
               </a>
             </NavList>
@@ -47,10 +47,10 @@ const Header = () => {
             <User>
               
               <a>
-                <img src="/images/user.svg" alt="UserIcon" />
+                <img src="/images/header/user.svg" alt="UserIcon" />
                 <div>
                   <span>Me</span>
-                  <img src="/images/down-icon.svg" alt="DownArrow" />
+                  <img src="/images/header/down-icon.svg" alt="DownArrow" />
                 </div>
               </a>
 
@@ -62,10 +62,10 @@ const Header = () => {
             <Work>
               
               <a href="#">
-                <img src="/images/nav-work.svg" alt="WorkIcon" />
+                <img src="/images/header/nav-work.svg" alt="WorkIcon" />
                 <div>
                   <span>Work</span>
-                  <img src="/images/down-icon.svg" alt="DownArrow" />
+                  <img src="/images/header/down-icon.svg" alt="DownArrow" />
                 </div>
               </a>
             </Work>

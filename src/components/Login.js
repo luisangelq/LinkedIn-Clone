@@ -1,11 +1,19 @@
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { signIn } from "../actions";
+import { Navigate } from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
+
+  console.log(props);
   return (
     <Container>
+      {
+        props.user && <Navigate to="/home" />
+      }
       <Nav>
         <a href="/">
-          <img src="/images/login-logo.svg" alt="LinkedIn" />
+          <img src="/images/login/login-logo.svg" alt="LinkedIn" />
         </a>
 
         <div>
@@ -19,12 +27,12 @@ const Login = () => {
         <Hero>
           <h1>Welcome to your professional comunity </h1>
 
-          <img src="/images/login-hero.svg" alt="Illustration" />
+          <img src="/images/login/login-hero.svg" alt="Illustration" />
         </Hero>
 
         <Form>
-          <Google>
-            <img src="/images/google.svg" alt="Google" />
+          <Google onClick={() => props.signIn()}>
+            <img src="/images/login/google.svg" alt="Google" />
             <span>Sign in with Google</span>
           </Google>
         </Form>
@@ -62,7 +70,6 @@ const Join = styled.a`
   margin-right: 12px;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
-  
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.08);
@@ -177,4 +184,18 @@ const Google = styled.button`
     color: rgba(0, 0, 0, 0.8);
   }
 `;
-export default Login;
+
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    user: state.userState.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signIn: () => dispatch(signIn()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -7,7 +7,7 @@ const LeftSide = () => {
         <UserInfo>
           <CardBackground />
           <LinkUser>
-            <img src="/images/UserPhoto.jpg" alt="UserPhoto" />
+            <img src="/images/leftSide/photo.svg" alt="UserPhoto" />
 
             <span>Luis Angel Quiñones Guerrero</span>
           </LinkUser>
@@ -23,12 +23,12 @@ const LeftSide = () => {
             <span>Grow your network</span>
           </div>
 
-          <img src="/images/widget-icon.svg" alt="Connections" />
+          <img src="/images/leftSide/connections-icon.svg" alt="Connections" />
         </Widget>
 
         <Items>
           <a>
-            <img src="/images/item-icon.svg" alt="Item" />
+            <img src="/images/leftSide/item-icon.svg" alt="Item" />
             <span>My Items</span>
           </a>
         </Items>
@@ -40,7 +40,7 @@ const LeftSide = () => {
         </a>
         <a>
           <span>Events</span>
-          <img src="/images/plus-icon.svg" alt="Event" />
+          <img src="/images/leftSide/plus-icon.svg" alt="Event" />
         </a>
         <a>
           <span>Follow Hashtags</span>
@@ -72,7 +72,7 @@ const UserInfo = styled.div`
 `;
 
 const CardBackground = styled.div`
-  background-image: url("/images/card-bg.svg");
+  background-image: url("/images/leftSide/card-bg.svg");
   background-position: center;
   background-size: cover;
   height: 56px;

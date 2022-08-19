@@ -6,18 +6,18 @@ const RightSide = () => {
       <FollowCard>
         <Title>
           <h3>Add to your feed</h3>
-          <img src="/images/feed-icon.svg" alt="Plus" />
+          <img src="/images/rightSide/feed-icon.svg" alt="feed icon" />
         </Title>
 
         <FeedList>
           <li>
             <a>
-              <img src="/images/hash-icon.svg" alt="#" />
+              <img src="/images/rightSide/hash-icon.svg" alt="#" />
 
               <InfoFeed>
                 <span>#LinkedIn</span>
                 <button>
-                  <img src="/images/plus-icon.svg" alt="Add" />
+                  <img src="/images/rightSide/plus-icon.svg" alt="Add" />
                   Follow
                 </button>
               </InfoFeed>
@@ -26,12 +26,12 @@ const RightSide = () => {
 
           <li>
             <a>
-              <img src="/images/hash-icon.svg" alt="#" />
+              <img src="/images/rightSide/hash-icon.svg" alt="#" />
 
               <InfoFeed>
                 <span>#Video</span>
                 <button>
-                  <img src="/images/plus-icon.svg" alt="Add" />
+                  <img src="/images/rightSide/plus-icon.svg" alt="Add" />
                   Follow
                 </button>
               </InfoFeed>
@@ -39,12 +39,12 @@ const RightSide = () => {
           </li>
           <li>
             <a>
-              <img src="/images/hash-icon.svg" alt="#" />
+              <img src="/images/rightSide/hash-icon.svg" alt="#" />
 
               <InfoFeed>
-                <span>#Video</span>
+                <span>#Event</span>
                 <button>
-                  <img src="/images/plus-icon.svg" alt="Add" />
+                  <img src="/images/rightSide/plus-icon.svg" alt="Add" />
                   Follow
                 </button>
               </InfoFeed>
@@ -55,7 +55,7 @@ const RightSide = () => {
         <Footer>
           <a>
             <span>View all recommendations</span>
-            <img src="/images/right-icon.svg" alt="Arrow" />
+            <img src="/images/rightSide/right-icon.svg" alt="Arrow" />
           </a>
         </Footer>
       </FollowCard>
