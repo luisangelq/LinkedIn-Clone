@@ -1,3 +1,5 @@
+
+
 const INITIAL_STATE = {
     user: null,
 }
@@ -11,6 +13,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 user: action.payload,
             }
         case 'CLEAR_USER':
+            console.log(action.payload);
             return {
                 ...state,
                 user: null,

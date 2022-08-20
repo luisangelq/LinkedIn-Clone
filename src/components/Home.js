@@ -4,9 +4,16 @@ import LeftSide from "./LeftSide";
 import Main from "./Main";
 import RightSide from "./RightSide";
 
-const Home = () => {
+import { connect } from "react-redux";
+import { Navigate } from "react-router";
+
+const Home = (props) => {
+  console.log(props);
   return (
     <Container>
+      {
+        !props.user && <Navigate to="/" />
+      }
       <Section>
         <h5>
           <a>Hiring in a Hurry? - .</a>
@@ -69,12 +76,18 @@ const Layout = styled.div`
   grid-template-columns: 1.5fr 3.5fr 2fr;
   gap: 25px;
 
-    @media (max-width: 768px) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  };
+};
+
+export default connect(mapStateToProps)(Home);

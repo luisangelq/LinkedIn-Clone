@@ -1,6 +1,10 @@
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { signOut } from "../actions";
+import { Navigate } from "react-router";
 
-const Header = () => {
+const Header = (props) => {
+  console.log(props);
   return (
     <Container>
       <Content>
@@ -33,34 +37,43 @@ const Header = () => {
             </NavList>
             <NavList>
               <a href="/#">
-                <img src="/images/header/nav-messaging.svg" alt="Notification" />
+                <img
+                  src="/images/header/nav-messaging.svg"
+                  alt="Notification"
+                />
                 <span>Messages</span>
               </a>
             </NavList>
             <NavList>
               <a href="/#">
-                <img src="/images/header/nav-notifications.svg" alt="Notification" />
+                <img
+                  src="/images/header/nav-notifications.svg"
+                  alt="Notification"
+                />
                 <span>Notifications</span>
               </a>
             </NavList>
 
             <User>
-              
               <a>
-                <img src="/images/header/user.svg" alt="UserIcon" />
+                {props?.user && props?.user.photoURL ? (
+                  <img srcSet={props.user.photoURL} alt="User Photo" />
+                ) : (
+                  <img srcSet="/images/header/user.svg" alt="UserIcon" />
+                )}
+
                 <div>
                   <span>Me</span>
                   <img src="/images/header/down-icon.svg" alt="DownArrow" />
                 </div>
               </a>
 
-              <SignOut>
+              <SignOut onClick={() => props.signOut()}>
                 <a>Sign Out</a>
               </SignOut>
             </User>
 
             <Work>
-              
               <a href="#">
                 <img src="/images/header/nav-work.svg" alt="WorkIcon" />
                 <div>
@@ -79,7 +92,7 @@ const Header = () => {
 const Container = styled.div`
   background-color: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
   position: fixed;
   top: 0;
   left: 0;
@@ -165,8 +178,9 @@ const NavList = styled.li`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: -8px;
+  margin-bottom: -10px;
   width: 80px;
+  padding-bottom: 2px;
   border-bottom: 2px solid transparent;
 
   &.active {
@@ -203,26 +217,30 @@ const NavList = styled.li`
 
 const SignOut = styled.div`
   position: absolute;
-  top: 45px;
+  top: 50px;
   background: white;
   border-radius: 5px;
   padding: 1rem;
   width: 80px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   display: none;
 
   a {
-  font-size: 14px;
+    font-size: 14px;
   }
 
   @media (max-width: 768px) {
-    top: -50px;
+    top: -40px;
   }
 `;
 
-
 const User = styled(NavList)`
+  a {
+    opacity: 1;
+  }
+
   a > img {
-    width: 24px;
+    width: 28px;
     border-radius: 50%;
   }
 
@@ -230,6 +248,7 @@ const User = styled(NavList)`
     display: flex;
     align-items: center;
     gap: 0.2rem;
+    opacity: 0.6;
   }
 
   &:hover {
@@ -242,7 +261,27 @@ const User = styled(NavList)`
 const Work = styled(User)`
   padding-left: 0.4rem;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
+
+  a {
+    opacity: 0.6;
+  }
+
+  a > div {
+    opacity: 1;
+  }
 `;
 
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    user: state.userState.user,
+  };
+};
 
-export default Header;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signOut: () => dispatch(signOut()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

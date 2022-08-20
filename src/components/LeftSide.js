@@ -1,19 +1,29 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
-const LeftSide = () => {
+import PostModal from "./PostModal";
+
+const LeftSide = (props) => {
+  const [showModal, setShowModal] = useState(false);
+  console.log(showModal);
   return (
     <Container>
       <ArtCard>
         <UserInfo>
           <CardBackground />
-          <LinkUser>
+          <LinkUser onClick={() => setShowModal(!showModal)}>
             <img src="/images/leftSide/photo.svg" alt="UserPhoto" />
 
-            <span>Luis Angel Quiñones Guerrero</span>
+            <span>
+              {props.user && props.user.displayName
+                ? props.user.displayName
+                : "Welcome There!"}
+            </span>
           </LinkUser>
 
           <WorkSlogan>
-            <span>Software Technical Support at CONTPAQi</span>
+            <span>-</span>
           </WorkSlogan>
         </UserInfo>
 
@@ -49,6 +59,8 @@ const LeftSide = () => {
           <span>Discover more..</span>
         </a>
       </ComunityCard>
+
+      {showModal && <PostModal setShowModal={setShowModal} />}
     </Container>
   );
 };
@@ -120,7 +132,7 @@ const Widget = styled.a`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: .5rem;
+  gap: 0.5rem;
   margin: 1rem 0;
   padding: 0.5rem 1rem;
   transition: all 0.2s ease-in-out;
@@ -178,8 +190,6 @@ const ComunityCard = styled(ArtCard)`
   display: flex;
   flex-direction: column;
 
-  
-
   a {
     display: flex;
     align-items: center;
@@ -188,8 +198,6 @@ const ComunityCard = styled(ArtCard)`
     font-size: 12px;
     font-weight: 600;
     color: #666666;
-
-    
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.08);
@@ -201,11 +209,14 @@ const ComunityCard = styled(ArtCard)`
       color: rgba(0, 0, 0, 0.5);
       font-size: 13px;
       justify-content: center;
-      
     }
   }
-
-  
 `;
 
-export default LeftSide;
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  };
+};
+
+export default connect(mapStateToProps)(LeftSide);

@@ -4,8 +4,6 @@ import { signIn } from "../actions";
 import { Navigate } from "react-router-dom";
 
 const Login = (props) => {
-
-  console.log(props);
   return (
     <Container>
       {
@@ -186,7 +184,7 @@ const Google = styled.button`
 `;
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  console.log(state.userState.user);
   return {
     user: state.userState.user,
   };
