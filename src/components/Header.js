@@ -224,6 +224,7 @@ const SignOut = styled.div`
   width: 80px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: none;
+  animation: fadeIn .3s;
 
   a {
     font-size: 14px;
