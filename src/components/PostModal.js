@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Dropzone, { useDropzone } from "react-dropzone";
 
@@ -7,61 +7,83 @@ const PostModal = ({ setShowModal }) => {
   const [showDropzone, setShowDropzone] = useState(false);
   const [shareImage, setShareImage] = useState("");
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const image = acceptedFiles.target.files[0];
+  const handleFile = (acceptedFiles) => {
+    const image = acceptedFiles[0];
 
-    console.log(image);
-
+    console.log(image.type);
     if (image === "" || image === undefined) {
-      alert(`Not an image, the file is a ${typeof image}`);
+      alert("There's no image");
       return;
     }
 
-    setShareImage(image);
-  }, []);
+    if (
+      image.type == "image/png" ||
+      image.type == "image/jpeg" ||
+      image.type == "image/gif"
+    ) {
+      setShareImage(image);
+      setShowDropzone(true);
+
+      return;
+    } else {
+      const getExtension = image.type.split("/");
+
+      console.log(getExtension);
+      alert(`Not an image, the file is a ${getExtension[1]}`);
+      return;
+    }
+  };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
     noClick: true,
   });
-
-  console.log(isDragActive);
 
   return (
     <Container onClick={() => setShowModal(false)}>
       <Content onClick={(e) => e.stopPropagation()}>
         <Header>
-          <h3>{isDragActive ? "Create post" : "Edit your photo"}</h3>
-          <button>
-            <img
-              src="/images/modal/close-icon.svg"
-              alt="Close"
-              onClick={() => setShowModal(false)}
-            />
+          <h3>
+            {isDragActive || showDropzone ? "Edit your photo" : "Create post"}
+          </h3>
+          <button onClick={() => setShowModal(false)}>
+            <img src="/images/modal/close-icon.svg" alt="Close" />
           </button>
         </Header>
 
         <div {...getRootProps()}>
           <input {...getInputProps()} />
           {isDragActive || showDropzone ? (
-            <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+            <Dropzone onDrop={(acceptedFiles) => handleFile(acceptedFiles)}>
               {({ getRootProps, getInputProps }) => (
                 <>
-                  <DropImage>
-                    <button {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      Select images to share
-                    </button>
-                  </DropImage>
+                  <ImagePreview {...getRootProps()}>
+                    {shareImage ? (
+                      <img src={URL.createObjectURL(shareImage)} />
+                    ) : (
+                      <DropImage>
+                        <button>
+                          <input {...getInputProps()} />
+                          Select images to share
+                        </button>
+                      </DropImage>
+                    )}
+                  </ImagePreview>
 
                   <DropButtons>
                     <button
                       className="back"
-                      onClick={() => setShowDropzone(false)}
+                      onClick={() => {
+                        setShowDropzone(false);
+                        setShareImage("");
+                      }}
                     >
                       Back
                     </button>
 
-                    <button className={text ? "enabled" : "disabled"}>
+                    <button
+                      className={shareImage ? "enabled" : "disabled"}
+                      onClick={() => setShowDropzone(false)}
+                    >
                       Done
                     </button>
                   </DropButtons>
@@ -91,11 +113,21 @@ const PostModal = ({ setShowModal }) => {
                     onChange={(e) => setText(e.target.value)}
                   />
 
-                  <button onClick={() => setText(text + " #")}>
-                    Add hashtag
-                  </button>
+                  {shareImage && (
+                    <ImagePost>
+                      <button onClick={() => setShareImage("")}>
+                        x
+                      </button>
+                      <img src={URL.createObjectURL(shareImage)} />
+                    </ImagePost>
+                  )}
                 </WritePost>
+
+                
               </Body>
+              <Hashtag onClick={() => setText(text + " #")}>
+                  Add hashtag
+                </Hashtag>
               <Footer>
                 <LeftButtons>
                   <button onClick={() => setShowDropzone(true)}>
@@ -107,7 +139,7 @@ const PostModal = ({ setShowModal }) => {
                     </div>
                   </button>
 
-                  <button>
+                  <button onClick={() => setShowDropzone(true)}>
                     <img src="/images/modal/videoModal-icon.svg" alt="Photo" />
                   </button>
                   <button>
@@ -139,8 +171,12 @@ const PostModal = ({ setShowModal }) => {
                     Anyone
                   </button>
                   <button
-                    className={text ? "enabled" : "disabled"}
-                    onClick={() => setShowModal(false)}
+                    className={text || shareImage ? "enabled" : "disabled"}
+                    onClick={() =>  {
+                      if(text || shareImage){
+                        setShowModal(false)
+                      }
+                    }}
                   >
                     Post
                   </button>
@@ -165,7 +201,19 @@ const Container = styled.div`
   animation: fadeIn 0.3s;
 `;
 
+const ImagePreview = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem;
+
+  img {
+    width: 100%;
+  }
+`;
+
 const DropImage = styled.div`
+  width: 100%;
   height: 200px;
   display: flex;
   justify-content: center;
@@ -186,17 +234,15 @@ const DropImage = styled.div`
     }
   }
 `;
+
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  justify-content: center;
+  margin: 2rem auto;
   background-color: #fff;
   width: 90%;
   max-width: 550px;
-
   border-radius: 0.5rem;
 `;
 
@@ -216,6 +262,7 @@ const Header = styled.div`
 
 const Body = styled.div`
   padding: 1rem 1.2rem;
+  overflow-y: scroll;
 `;
 
 const UserInfo = styled.div`
@@ -263,9 +310,10 @@ const UserInfo = styled.div`
 const WritePost = styled.div`
   display: flex;
   flex-direction: column;
+  max-height: 370px;
 
   textarea {
-    min-height: 100px;
+    min-height: 150px;
     resize: none;
     border: none;
     outline: none;
@@ -277,20 +325,51 @@ const WritePost = styled.div`
       color: rgba(0, 0, 0, 0.45);
     }
   }
+`;
+
+const ImagePost = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: .5rem;
+
+  img {
+    width: 70%;
+    margin: 0 auto;
+  }
 
   button {
-    width: 110px;
-    font-size: 15px;
-    font-weight: 600;
-    color: #0a66c2;
-    margin-top: 1rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease-in-out;
+    margin: .5rem;
+    margin-left: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 24px;
+    padding: 0 .5rem;
+    border-radius: 50%;
+    transition: all .2s ease-in-out;
 
     &:hover {
-      background-color: #e2f0fe;
+      background-color: rgba(0, 0, 0, 0.8);
     }
+    
+  }
+  
+`
+
+const Hashtag = styled.button`
+  width: 110px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0a66c2;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #e2f0fe;
   }
 `;
 

@@ -1,12 +1,19 @@
+import { useState } from "react";
 import styled from "styled-components";
 
+import PostModal from "./PostModal";
+
 const Main = () => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <Container>
       <CommonCard>
         <SharePost>
           <img src="/images/UserPhoto.jpg" alt="Post" />
-          <button>Start a post</button>
+          <button
+            onClick={() => setShowModal(true)}
+          >Start a post</button>
         </SharePost>
 
         <ActionsPost>
@@ -104,6 +111,8 @@ const Main = () => {
           </button>
         </Footer>
       </ShareCards>
+
+      {showModal && <PostModal setShowModal={setShowModal} />}
     </Container>
   );
 };

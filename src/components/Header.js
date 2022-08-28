@@ -57,9 +57,9 @@ const Header = (props) => {
             <User>
               <a>
                 {props?.user && props?.user.photoURL ? (
-                  <img srcSet={props.user.photoURL} alt="User Photo" />
+                  <img src={props.user.photoURL} alt="User Photo" />
                 ) : (
-                  <img srcSet="/images/header/user.svg" alt="UserIcon" />
+                  <img src="/images/header/user.svg" alt="UserIcon" />
                 )}
 
                 <div>
@@ -224,7 +224,7 @@ const SignOut = styled.div`
   width: 80px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: none;
-  animation: fadeIn .3s;
+  animation: fadeIn 0.3s;
 
   a {
     font-size: 14px;
