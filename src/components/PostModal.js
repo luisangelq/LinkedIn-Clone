@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Dropzone, { useDropzone } from "react-dropzone";
 
+
 const PostModal = ({ setShowModal }) => {
   const [text, setText] = useState("");
   const [showDropzone, setShowDropzone] = useState(false);
@@ -39,8 +40,11 @@ const PostModal = ({ setShowModal }) => {
   });
 
   return (
-    <Container onClick={() => setShowModal(false)}>
-      <Content onClick={(e) => e.stopPropagation()}>
+    <Container onMouseDown={() => setShowModal(false)}>
+      <Content
+        onMouseDown={(e) => e.stopPropagation()}
+        // on={(e) => e.preventDefault()}
+      >
         <Header>
           <h3>
             {isDragActive || showDropzone ? "Edit your photo" : "Create post"}
@@ -115,19 +119,15 @@ const PostModal = ({ setShowModal }) => {
 
                   {shareImage && (
                     <ImagePost>
-                      <button onClick={() => setShareImage("")}>
-                        x
-                      </button>
+                      <button onClick={() => setShareImage("")}>x</button>
                       <img src={URL.createObjectURL(shareImage)} />
                     </ImagePost>
                   )}
                 </WritePost>
-
-                
               </Body>
               <Hashtag onClick={() => setText(text + " #")}>
-                  Add hashtag
-                </Hashtag>
+                Add hashtag
+              </Hashtag>
               <Footer>
                 <LeftButtons>
                   <button onClick={() => setShowDropzone(true)}>
@@ -172,9 +172,9 @@ const PostModal = ({ setShowModal }) => {
                   </button>
                   <button
                     className={text || shareImage ? "enabled" : "disabled"}
-                    onClick={() =>  {
-                      if(text || shareImage){
-                        setShowModal(false)
+                    onClick={() => {
+                      if (text || shareImage) {
+                        setShowModal(false);
                       }
                     }}
                   >
@@ -262,12 +262,12 @@ const Header = styled.div`
 
 const Body = styled.div`
   padding: 1rem 1.2rem;
-  overflow-y: scroll;
+  overflow-y: auto;
+  max-height: 500px;
 `;
 
 const UserInfo = styled.div`
   display: flex;
-  margin-bottom: 2rem;
 
   img {
     width: 48px;
@@ -313,6 +313,7 @@ const WritePost = styled.div`
   max-height: 370px;
 
   textarea {
+    margin: 2rem 0;
     min-height: 150px;
     resize: none;
     border: none;
@@ -332,7 +333,7 @@ const ImagePost = styled.div`
   flex-direction: column;
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: .5rem;
+  border-radius: 0.5rem;
 
   img {
     width: 70%;
@@ -340,22 +341,20 @@ const ImagePost = styled.div`
   }
 
   button {
-    margin: .5rem;
+    margin: 0.5rem;
     margin-left: auto;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     font-size: 24px;
-    padding: 0 .5rem;
+    padding: 0 0.5rem;
     border-radius: 50%;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.8);
     }
-    
   }
-  
-`
+`;
 
 const Hashtag = styled.button`
   width: 110px;
