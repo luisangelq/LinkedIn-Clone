@@ -2,37 +2,46 @@ import { useState } from "react";
 import styled from "styled-components";
 import Dropzone, { useDropzone } from "react-dropzone";
 
-
 const PostModal = ({ setShowModal }) => {
   const [text, setText] = useState("");
   const [showDropzone, setShowDropzone] = useState(false);
   const [shareImage, setShareImage] = useState("");
 
   const handleFile = (acceptedFiles) => {
-    const image = acceptedFiles[0];
+    const file = acceptedFiles[0];
+    const getExtension = file.type.split("/");
 
-    console.log(image.type);
-    if (image === "" || image === undefined) {
-      alert("There's no image");
+    console.log(file.type);
+    if (file === "" || file === undefined) {
+      alert("There's no file");
       return;
     }
 
+    //Check for image type
     if (
-      image.type == "image/png" ||
-      image.type == "image/jpeg" ||
-      image.type == "image/gif"
+      file.type == "image/png" ||
+      file.type == "image/jpeg" ||
+      file.type == "image/gif"
     ) {
-      setShareImage(image);
+      setShareImage(file);
       setShowDropzone(true);
 
       return;
-    } else {
-      const getExtension = image.type.split("/");
+    }
 
-      console.log(getExtension);
-      alert(`Not an image, the file is a ${getExtension[1]}`);
+    //Check for video type
+    if ( file.type == "video/mp4") {
+      setShareImage(file);
+      setShowDropzone(true);
+
       return;
     }
+
+    
+
+    console.log(getExtension);
+    alert(`Not an image, the file is a ${getExtension[1]}`);
+    return;
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -62,6 +71,7 @@ const PostModal = ({ setShowModal }) => {
                 <>
                   <ImagePreview {...getRootProps()}>
                     {shareImage ? (
+                      
                       <img src={URL.createObjectURL(shareImage)} />
                     ) : (
                       <DropImage>
@@ -130,7 +140,12 @@ const PostModal = ({ setShowModal }) => {
               </Hashtag>
               <Footer>
                 <LeftButtons>
-                  <button onClick={() => setShowDropzone(true)}>
+                  <button
+                    onClick={() => {
+                      setShowDropzone(true);
+                      setShareImage("");
+                    }}
+                  >
                     <div>
                       <img
                         src="/images/modal/photoModal-icon.svg"
@@ -139,7 +154,12 @@ const PostModal = ({ setShowModal }) => {
                     </div>
                   </button>
 
-                  <button onClick={() => setShowDropzone(true)}>
+                  <button
+                    onClick={() => {
+                      setShowDropzone(true);
+                      setShareImage("");
+                    }}
+                  >
                     <img src="/images/modal/videoModal-icon.svg" alt="Photo" />
                   </button>
                   <button>
@@ -337,7 +357,7 @@ const ImagePost = styled.div`
 
   img {
     width: 70%;
-    margin: 0 auto;
+    margin: 2rem auto;
   }
 
   button {
