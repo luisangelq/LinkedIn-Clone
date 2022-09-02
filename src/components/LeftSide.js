@@ -6,7 +6,6 @@ import PostModal from "./PostModal";
 
 const LeftSide = (props) => {
   const [showModal, setShowModal] = useState(false);
-  console.log(showModal);
   return (
     <Container>
       <ArtCard>

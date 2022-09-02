@@ -13,7 +13,6 @@ function App(props) {
     props.getUserAuth();
   } , []);
   
-  console.log(props);
   return (
     <div className="App">
       <Router>

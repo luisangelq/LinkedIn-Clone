@@ -2,16 +2,38 @@ import { useState } from "react";
 import styled from "styled-components";
 import Dropzone, { useDropzone } from "react-dropzone";
 
-const PostModal = ({ setShowModal }) => {
+import { connect } from "react-redux";
+import firebase from "firebase";
+import { postArticle } from "../actions";
+
+const PostModal = (props) => {
   const [text, setText] = useState("");
   const [showDropzone, setShowDropzone] = useState(false);
   const [screenFileType, setScreenFileType] = useState("");
   const [shareFile, setShareFile] = useState("");
 
+  const { user, setShowModal } = props;
+
+  const handlePost = (e) => {
+    e.preventDefault();
+
+    if (e.target != e.currentTarget) return;
+
+    const payload = {
+      file: shareFile,
+      user: user,
+      description: text,
+      timestamp: firebase.firestore.Timestamp.now(),
+    };
+
+    props.handlePost(payload)
+
+    setShowModal(false);
+  };
+
   const handleFile = (acceptedFiles) => {
     const file = acceptedFiles[0];
 
-    console.log(file.type);
     if (file === "" || file === undefined) {
       alert("There's no file");
       return;
@@ -19,9 +41,9 @@ const PostModal = ({ setShowModal }) => {
 
     //Check for image type
     if (
-      file.type == "image/png" && screenFileType == "image" ||
-      file.type == "image/jpeg" && screenFileType == "image"||
-      file.type == "image/gif" && screenFileType == "image"
+      (file.type == "image/png" && screenFileType == "image") ||
+      (file.type == "image/jpeg" && screenFileType == "image") ||
+      (file.type == "image/gif" && screenFileType == "image")
     ) {
       setShareFile(file);
       setShowDropzone(true);
@@ -30,7 +52,7 @@ const PostModal = ({ setShowModal }) => {
     }
 
     //Check for video type
-    if ( file.type == "video/mp4" && screenFileType == "video") {
+    if (file.type == "video/mp4" && screenFileType == "video") {
       setShareFile(file);
       setShowDropzone(true);
 
@@ -41,35 +63,36 @@ const PostModal = ({ setShowModal }) => {
     return;
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    noClick: true,
-  });
-
   const selectResource = (file) => {
-     //Check for image type
-     if (
+    //Check for image type
+    if (
       file.type == "image/png" ||
       file.type == "image/jpeg" ||
       file.type == "image/gif"
     ) {
-      return (
-        <img src={URL.createObjectURL(shareFile)} />
-      )
+      return <img src={URL.createObjectURL(shareFile)} />;
     }
 
     //Check for video type
-    if ( file.type == "video/mp4") {
+    if (file.type == "video/mp4") {
       return (
-        <video controls src={URL.createObjectURL(shareFile)} type={shareFile.type} />
-      )
+        <video
+          controls
+          src={URL.createObjectURL(shareFile)}
+          type={shareFile.type}
+        />
+      );
     }
-  }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    noClick: true,
+  });
 
   return (
     <Container onMouseDown={() => setShowModal(false)}>
       <Content
         onMouseDown={(e) => e.stopPropagation()}
-        // on={(e) => e.preventDefault()}
       >
         <Header>
           <h3>
@@ -87,7 +110,9 @@ const PostModal = ({ setShowModal }) => {
               {({ getRootProps, getInputProps }) => (
                 <>
                   <ImagePreview {...getRootProps()}>
-                    {shareFile ? selectResource(shareFile) : (
+                    {shareFile ? (
+                      selectResource(shareFile)
+                    ) : (
                       <DropImage>
                         <button>
                           <input {...getInputProps()} />
@@ -122,10 +147,14 @@ const PostModal = ({ setShowModal }) => {
             <>
               <Body>
                 <UserInfo>
-                  <img src="/images/modal/user.svg" alt="User" />
+                  {user?.photoURL ? (
+                    <img src={user?.photoURL} alt="User" />
+                  ) : (
+                    <img src="/images/modal/user.svg" alt="User" />
+                  )}
 
                   <div>
-                    <span className="name">Luis Angel Quiñones Guerrero</span>
+                    <span className="name">{user?.displayName}</span>
                     <button>
                       <img src="/images/modal/worldCard-icon.svg" alt="Edit" />
                       Anyone
@@ -158,7 +187,7 @@ const PostModal = ({ setShowModal }) => {
                     onClick={() => {
                       setShowDropzone(true);
                       setShareFile("");
-                      setScreenFileType("image")
+                      setScreenFileType("image");
                     }}
                   >
                     <div>
@@ -173,7 +202,7 @@ const PostModal = ({ setShowModal }) => {
                     onClick={() => {
                       setShowDropzone(true);
                       setShareFile("");
-                      setScreenFileType("video")
+                      setScreenFileType("video");
                     }}
                   >
                     <img src="/images/modal/videoModal-icon.svg" alt="Photo" />
@@ -208,11 +237,7 @@ const PostModal = ({ setShowModal }) => {
                   </button>
                   <button
                     className={text || shareFile ? "enabled" : "disabled"}
-                    onClick={() => {
-                      if (text || shareFile) {
-                        setShowModal(false);
-                      }
-                    }}
+                    onClick={(e) => handlePost(e)}
                   >
                     Post
                   </button>
@@ -246,6 +271,7 @@ const ImagePreview = styled.div`
   video,
   img {
     width: 100%;
+    height: 100%;
   }
 `;
 
@@ -512,4 +538,14 @@ const DropButtons = styled.div`
   }
 `;
 
-export default PostModal;
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  handlePost: (payload) => dispatch(postArticle(payload))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostModal);

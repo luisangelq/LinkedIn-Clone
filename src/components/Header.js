@@ -4,7 +4,6 @@ import { signOut } from "../actions";
 import { Navigate } from "react-router";
 
 const Header = (props) => {
-  console.log(props);
   return (
     <Container>
       <Content>
@@ -273,7 +272,6 @@ const Work = styled(User)`
 `;
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     user: state.userState.user,
   };

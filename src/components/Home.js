@@ -8,7 +8,6 @@ import { connect } from "react-redux";
 import { Navigate } from "react-router";
 
 const Home = (props) => {
-  console.log(props);
   return (
     <Container>
       {
