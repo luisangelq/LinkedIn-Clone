@@ -5,11 +5,11 @@ import Dropzone, { useDropzone } from "react-dropzone";
 const PostModal = ({ setShowModal }) => {
   const [text, setText] = useState("");
   const [showDropzone, setShowDropzone] = useState(false);
-  const [shareImage, setShareImage] = useState("");
+  const [screenFileType, setScreenFileType] = useState("");
+  const [shareFile, setShareFile] = useState("");
 
   const handleFile = (acceptedFiles) => {
     const file = acceptedFiles[0];
-    const getExtension = file.type.split("/");
 
     console.log(file.type);
     if (file === "" || file === undefined) {
@@ -19,34 +19,51 @@ const PostModal = ({ setShowModal }) => {
 
     //Check for image type
     if (
-      file.type == "image/png" ||
-      file.type == "image/jpeg" ||
-      file.type == "image/gif"
+      file.type == "image/png" && screenFileType == "image" ||
+      file.type == "image/jpeg" && screenFileType == "image"||
+      file.type == "image/gif" && screenFileType == "image"
     ) {
-      setShareImage(file);
+      setShareFile(file);
       setShowDropzone(true);
 
       return;
     }
 
     //Check for video type
-    if ( file.type == "video/mp4") {
-      setShareImage(file);
+    if ( file.type == "video/mp4" && screenFileType == "video") {
+      setShareFile(file);
       setShowDropzone(true);
 
       return;
     }
 
-    
-
-    console.log(getExtension);
-    alert(`Not an image, the file is a ${getExtension[1]}`);
+    alert(`This section only accepts ${screenFileType}s `);
     return;
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     noClick: true,
   });
+
+  const selectResource = (file) => {
+     //Check for image type
+     if (
+      file.type == "image/png" ||
+      file.type == "image/jpeg" ||
+      file.type == "image/gif"
+    ) {
+      return (
+        <img src={URL.createObjectURL(shareFile)} />
+      )
+    }
+
+    //Check for video type
+    if ( file.type == "video/mp4") {
+      return (
+        <video controls src={URL.createObjectURL(shareFile)} type={shareFile.type} />
+      )
+    }
+  }
 
   return (
     <Container onMouseDown={() => setShowModal(false)}>
@@ -56,7 +73,7 @@ const PostModal = ({ setShowModal }) => {
       >
         <Header>
           <h3>
-            {isDragActive || showDropzone ? "Edit your photo" : "Create post"}
+            {isDragActive || showDropzone ? "Edit your file" : "Create post"}
           </h3>
           <button onClick={() => setShowModal(false)}>
             <img src="/images/modal/close-icon.svg" alt="Close" />
@@ -70,14 +87,11 @@ const PostModal = ({ setShowModal }) => {
               {({ getRootProps, getInputProps }) => (
                 <>
                   <ImagePreview {...getRootProps()}>
-                    {shareImage ? (
-                      
-                      <img src={URL.createObjectURL(shareImage)} />
-                    ) : (
+                    {shareFile ? selectResource(shareFile) : (
                       <DropImage>
                         <button>
                           <input {...getInputProps()} />
-                          Select images to share
+                          Select {screenFileType}s to share
                         </button>
                       </DropImage>
                     )}
@@ -88,14 +102,14 @@ const PostModal = ({ setShowModal }) => {
                       className="back"
                       onClick={() => {
                         setShowDropzone(false);
-                        setShareImage("");
+                        setShareFile("");
                       }}
                     >
                       Back
                     </button>
 
                     <button
-                      className={shareImage ? "enabled" : "disabled"}
+                      className={shareFile ? "enabled" : "disabled"}
                       onClick={() => setShowDropzone(false)}
                     >
                       Done
@@ -127,10 +141,10 @@ const PostModal = ({ setShowModal }) => {
                     onChange={(e) => setText(e.target.value)}
                   />
 
-                  {shareImage && (
+                  {shareFile && (
                     <ImagePost>
-                      <button onClick={() => setShareImage("")}>x</button>
-                      <img src={URL.createObjectURL(shareImage)} />
+                      <button onClick={() => setShareFile("")}>x</button>
+                      {selectResource(shareFile)}
                     </ImagePost>
                   )}
                 </WritePost>
@@ -143,7 +157,8 @@ const PostModal = ({ setShowModal }) => {
                   <button
                     onClick={() => {
                       setShowDropzone(true);
-                      setShareImage("");
+                      setShareFile("");
+                      setScreenFileType("image")
                     }}
                   >
                     <div>
@@ -157,7 +172,8 @@ const PostModal = ({ setShowModal }) => {
                   <button
                     onClick={() => {
                       setShowDropzone(true);
-                      setShareImage("");
+                      setShareFile("");
+                      setScreenFileType("video")
                     }}
                   >
                     <img src="/images/modal/videoModal-icon.svg" alt="Photo" />
@@ -191,9 +207,9 @@ const PostModal = ({ setShowModal }) => {
                     Anyone
                   </button>
                   <button
-                    className={text || shareImage ? "enabled" : "disabled"}
+                    className={text || shareFile ? "enabled" : "disabled"}
                     onClick={() => {
-                      if (text || shareImage) {
+                      if (text || shareFile) {
                         setShowModal(false);
                       }
                     }}
@@ -227,6 +243,7 @@ const ImagePreview = styled.div`
   align-items: center;
   margin: 2rem;
 
+  video,
   img {
     width: 100%;
   }
@@ -355,6 +372,7 @@ const ImagePost = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
 
+  video,
   img {
     width: 70%;
     margin: 2rem auto;
