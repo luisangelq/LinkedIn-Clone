@@ -17,7 +17,7 @@ const PostModal = (props) => {
   const handlePost = (e) => {
     e.preventDefault();
 
-    if (e.target != e.currentTarget) return;
+    if (e.target !== e.currentTarget) return;
 
     const payload = {
       file: shareFile,
@@ -41,9 +41,9 @@ const PostModal = (props) => {
 
     //Check for image type
     if (
-      (file.type == "image/png" && screenFileType == "image") ||
-      (file.type == "image/jpeg" && screenFileType == "image") ||
-      (file.type == "image/gif" && screenFileType == "image")
+      (file.type === "image/png" && screenFileType === "image") ||
+      (file.type === "image/jpeg" && screenFileType === "image") ||
+      (file.type === "image/gif" && screenFileType === "image")
     ) {
       setShareFile(file);
       setShowDropzone(true);
@@ -52,7 +52,7 @@ const PostModal = (props) => {
     }
 
     //Check for video type
-    if (file.type == "video/mp4" && screenFileType == "video") {
+    if (file.type === "video/mp4" && screenFileType === "video") {
       setShareFile(file);
       setShowDropzone(true);
 
@@ -66,15 +66,15 @@ const PostModal = (props) => {
   const selectResource = (file) => {
     //Check for image type
     if (
-      file.type == "image/png" ||
-      file.type == "image/jpeg" ||
-      file.type == "image/gif"
+      file.type === "image/png" ||
+      file.type === "image/jpeg" ||
+      file.type === "image/gif"
     ) {
       return <img src={URL.createObjectURL(shareFile)} />;
     }
 
     //Check for video type
-    if (file.type == "video/mp4") {
+    if (file.type === "video/mp4") {
       return (
         <video
           controls
@@ -193,7 +193,7 @@ const PostModal = (props) => {
                     <div>
                       <img
                         src="/images/modal/photoModal-icon.svg"
-                        alt="Photo"
+                        alt="user-icon"
                       />
                     </div>
                   </button>
