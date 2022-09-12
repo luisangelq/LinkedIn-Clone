@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Dropzone, { useDropzone } from "react-dropzone";
+import Spinner from "./Spinner";
 
 import { connect } from "react-redux";
 import firebase from "firebase";
@@ -10,9 +11,9 @@ const PostModal = (props) => {
   const [text, setText] = useState("");
   const [showDropzone, setShowDropzone] = useState(false);
   const [screenFileType, setScreenFileType] = useState("");
-  const [shareFile, setShareFile] = useState("");
+  const [shareFile, setShareFile] = useState({});
 
-  const { user, setShowModal } = props;
+  const { user, setShowModal, loading } = props;
 
   const handlePost = (e) => {
     e.preventDefault();
@@ -26,9 +27,11 @@ const PostModal = (props) => {
       timestamp: firebase.firestore.Timestamp.now(),
     };
 
-    props.handlePost(payload)
+    props.handlePost(payload);
 
-    setShowModal(false);
+    setTimeout(() => {
+      setShowModal(false)
+    }, 2000);
   };
 
   const handleFile = (acceptedFiles) => {
@@ -45,7 +48,10 @@ const PostModal = (props) => {
       (file.type === "image/jpeg" && screenFileType === "image") ||
       (file.type === "image/gif" && screenFileType === "image")
     ) {
-      setShareFile(file);
+      setShareFile({
+        file: file,
+        type: "image"
+      });
       setShowDropzone(true);
 
       return;
@@ -53,7 +59,10 @@ const PostModal = (props) => {
 
     //Check for video type
     if (file.type === "video/mp4" && screenFileType === "video") {
-      setShareFile(file);
+      setShareFile({
+        file: file,
+        type: "video"
+      });
       setShowDropzone(true);
 
       return;
@@ -70,7 +79,7 @@ const PostModal = (props) => {
       file.type === "image/jpeg" ||
       file.type === "image/gif"
     ) {
-      return <img src={URL.createObjectURL(shareFile)} />;
+      return <img src={URL.createObjectURL(shareFile.file)} />;
     }
 
     //Check for video type
@@ -78,8 +87,8 @@ const PostModal = (props) => {
       return (
         <video
           controls
-          src={URL.createObjectURL(shareFile)}
-          type={shareFile.type}
+          src={URL.createObjectURL(shareFile.file)}
+          type={shareFile.file.type}
         />
       );
     }
@@ -91,9 +100,7 @@ const PostModal = (props) => {
 
   return (
     <Container onMouseDown={() => setShowModal(false)}>
-      <Content
-        onMouseDown={(e) => e.stopPropagation()}
-      >
+      <Content onMouseDown={(e) => e.stopPropagation()}>
         <Header>
           <h3>
             {isDragActive || showDropzone ? "Edit your file" : "Create post"}
@@ -110,8 +117,8 @@ const PostModal = (props) => {
               {({ getRootProps, getInputProps }) => (
                 <>
                   <ImagePreview {...getRootProps()}>
-                    {shareFile ? (
-                      selectResource(shareFile)
+                    {shareFile.file ? (
+                      selectResource(shareFile.file)
                     ) : (
                       <DropImage>
                         <button>
@@ -127,14 +134,14 @@ const PostModal = (props) => {
                       className="back"
                       onClick={() => {
                         setShowDropzone(false);
-                        setShareFile("");
+                        setShareFile({});
                       }}
                     >
                       Back
                     </button>
 
                     <button
-                      className={shareFile ? "enabled" : "disabled"}
+                      className={shareFile.file ? "enabled" : "disabled"}
                       onClick={() => setShowDropzone(false)}
                     >
                       Done
@@ -170,10 +177,10 @@ const PostModal = (props) => {
                     onChange={(e) => setText(e.target.value)}
                   />
 
-                  {shareFile && (
+                  {shareFile.file && (
                     <ImagePost>
                       <button onClick={() => setShareFile("")}>x</button>
-                      {selectResource(shareFile)}
+                      {selectResource(shareFile.file)}
                     </ImagePost>
                   )}
                 </WritePost>
@@ -186,7 +193,7 @@ const PostModal = (props) => {
                   <button
                     onClick={() => {
                       setShowDropzone(true);
-                      setShareFile("");
+                      setShareFile({});
                       setScreenFileType("image");
                     }}
                   >
@@ -201,7 +208,7 @@ const PostModal = (props) => {
                   <button
                     onClick={() => {
                       setShowDropzone(true);
-                      setShareFile("");
+                      setShareFile({});
                       setScreenFileType("video");
                     }}
                   >
@@ -236,10 +243,10 @@ const PostModal = (props) => {
                     Anyone
                   </button>
                   <button
-                    className={text || shareFile ? "enabled" : "disabled"}
+                    className={text || shareFile.file ? "enabled" : "disabled"}
                     onClick={(e) => handlePost(e)}
                   >
-                    Post
+                    {loading ? <Spinner /> : "Post"}
                   </button>
                 </RightButtons>
               </Footer>
@@ -540,12 +547,13 @@ const DropButtons = styled.div`
 
 const mapStateToProps = (state) => {
   return {
+    loading: state.articleState.loading,
     user: state.userState.user,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  handlePost: (payload) => dispatch(postArticle(payload))
+  handlePost: (payload) => dispatch(postArticle(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostModal);

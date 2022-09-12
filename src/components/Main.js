@@ -1,19 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import PostModal from "./PostModal";
 
-const Main = () => {
+import { connect } from "react-redux";
+import { getArticles } from "../actions";
+import Article from "./Article";
+
+const Main = (props) => {
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    props.handleGetArticles();
+  }, []);
 
   return (
     <Container>
       <CommonCard>
         <SharePost>
-          <img src="/images/UserPhoto.jpg" alt="Post" />
-          <button
-            onClick={() => setShowModal(true)}
-          >Start a post</button>
+        
+          <img src={props?.user?.photoURL} alt="Post" />
+          <button onClick={() => setShowModal(true)}>Start a post</button>
         </SharePost>
 
         <ActionsPost>
@@ -48,69 +54,10 @@ const Main = () => {
         <img src="/images/main/down-icon.svg" alt="Arrow" />
       </FilterCards>
 
-    
-
-      <ShareCards>
-        <Head>
-          <img src="/images/UserPhoto.jpg" alt="User" />
-
-          <div>
-            <span className="name">Luis Angel Quiñones Guerrero</span>
-            <span className="slogan">Software technical support</span>
-            <span className="date">
-              10m •
-              <img src="/images/main/worldCard-icon.svg" alt="World icon" />
-            </span>
-          </div>
-
-          <img
-            className="dots"
-            src="/images/main/dotsCard-icon.svg"
-            alt="Dots icon"
-          />
-        </Head>
-
-        <Content>
-          <p>
-            🌎 Responde esta encuesta y se parte de los profesionales que
-            aportan un granito de arena para conocer la industria y mejorar las
-            condiciones laborales de todos quienes son parte de ella. 👉 Si eres
-            de Latam llena la encuesta aquí: https://lnkd.in/evKFDgMS
-          </p>
-
-          <img src="/images/main/card.jpg" alt="User" />
-        </Content>
-
-        <Reactions>
-          <img src="/images/main/smallLikeReact.svg" alt="Like icon" />
-          <img src="/images/main/smallLoveReact.svg" alt="Love Icon" />
-          <img src="/images/main/smallClapReact.svg" alt="Clap Icon" />
-
-          <span>4</span>
-        </Reactions>
-
-        <Footer>
-          <button>
-            <img src="/images/main/likeCard-icon.svg" alt="Like icon" />
-            <span>Like</span>
-          </button>
-
-          <button>
-            <img src="/images/main/commentCard-icon.svg" alt="Comment Icon" />
-            <span>Comment</span>
-          </button>
-
-          <button>
-            <img src="/images/main/shareCard-icon.svg" alt="Share Icon" />
-            <span>Share</span>
-          </button>
-
-          <button>
-            <img src="/images/main/sendCard-icon.svg" alt="Send Icon" />
-            <span>Send</span>
-          </button>
-        </Footer>
-      </ShareCards>
+      {props.articles.length > 0 &&
+        props.articles.map((article, key) => (
+          <Article key={key} article={article} />
+        ))}
 
       {showModal && <PostModal setShowModal={setShowModal} />}
     </Container>
@@ -214,96 +161,13 @@ const FilterCards = styled.button`
   }
 `;
 
-const ShareCards = styled(CommonCard)`
+export const ArticleContainer = styled(CommonCard)`
   padding: 0;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 `;
 
-const Head = styled.div`
-  display: flex;
-  margin: 1rem 0.5rem;
-
-  img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-  }
-
-  div {
-    display: flex;
-    flex-direction: column;
-    margin-left: 0.5rem;
-    gap: 0.2rem;
-
-    .name {
-      font-size: 14px;
-      font-weight: 600;
-      color: rgba(0, 0, 0, 0.8);
-    }
-    .slogan {
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.4);
-    }
-    .date {
-      display: flex;
-      align-items: center;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.4);
-
-      img {
-        width: 16px;
-        height: 16px;
-        margin-left: 0.2rem;
-      }
-    }
-  }
-
-  .dots {
-    width: 24px;
-    margin-top: -1.5rem;
-    margin-left: auto;
-  }
-`;
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  p {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.8);
-    margin: 0 1rem 1rem 1rem;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-`;
-
-const Reactions = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0 1rem; 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 0;
-
-  img {
-    width: 16px;
-    height: 16px;
-    margin-right: -0.3rem;
-
-  }
-
-  span {
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.4);
-    margin-left: .4rem;
-  }
-`
-
-const Footer = styled(ActionsPost)`
-  margin: .5rem;
+export const Footer = styled(ActionsPost)`
+  margin: 0.5rem;
 
   button {
     display: flex;
@@ -311,5 +175,17 @@ const Footer = styled(ActionsPost)`
     justify-content: center;
     width: 100%;
   }
-` ;
-export default Main;
+`;
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+    articles: state.articleState.articles,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  handleGetArticles: () => dispatch(getArticles()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
