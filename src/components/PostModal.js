@@ -30,7 +30,7 @@ const PostModal = (props) => {
     props.handlePost(payload);
 
     setTimeout(() => {
-      setShowModal(false)
+      setShowModal(false);
     }, 2000);
   };
 
@@ -50,7 +50,7 @@ const PostModal = (props) => {
     ) {
       setShareFile({
         file: file,
-        type: "image"
+        type: "image",
       });
       setShowDropzone(true);
 
@@ -61,7 +61,7 @@ const PostModal = (props) => {
     if (file.type === "video/mp4" && screenFileType === "video") {
       setShareFile({
         file: file,
-        type: "video"
+        type: "video",
       });
       setShowDropzone(true);
 
@@ -214,22 +214,22 @@ const PostModal = (props) => {
                   >
                     <img src="/images/modal/videoModal-icon.svg" alt="Photo" />
                   </button>
-                  <button>
+                  <button className="showPhone">
                     <img
                       src="/images/modal/documentModal-icon.svg"
                       alt="Photo"
                     />
                   </button>
-                  <button>
+                  <button className="showPhone">
                     <img src="/images/modal/jobModal-icon.svg" alt="Photo" />
                   </button>
-                  <button>
+                  <button className="showPhone">
                     <img
                       src="/images/modal/celebrateModal-icon.svg"
                       alt="Photo"
                     />
                   </button>
-                  <button>
+                  <button className="showPhone">
                     <img src="/images/modal/graphPost-icon.svg" alt="Photo" />
                   </button>
                   <button>
@@ -238,7 +238,7 @@ const PostModal = (props) => {
                 </LeftButtons>
 
                 <RightButtons>
-                  <button>
+                  <button className="showPhone">
                     <img src="/images/modal/commentCard-icon.svg" alt="Photo" />
                     Anyone
                   </button>
@@ -463,6 +463,12 @@ const LeftButtons = styled.div`
       background-color: rgba(0, 0, 0, 0.1);
     }
   }
+
+  .showPhone {
+    @media (max-width: 540px) {
+      display: none;
+    }
+  }
 `;
 
 const RightButtons = styled.div`
@@ -473,12 +479,15 @@ const RightButtons = styled.div`
   padding-left: 1rem;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 
+  @media (max-width: 360px) {
+    justify-content: flex-end;
+    }
+
   button {
     display: flex;
     align-items: center;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.55);
-
     border-radius: 2rem;
 
     img {
@@ -486,7 +495,13 @@ const RightButtons = styled.div`
       height: 16px;
       margin-right: 0.2rem;
     }
+
   }
+
+  .showPhone {
+    @media (max-width: 360px) {
+      display: none;
+    }
 
   .enabled {
     padding: 0.5rem 1rem;
