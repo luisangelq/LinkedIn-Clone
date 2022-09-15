@@ -11,6 +11,8 @@ const Main = (props) => {
 
   useEffect(() => {
     props.handleGetArticles();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
