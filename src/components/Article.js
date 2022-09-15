@@ -15,7 +15,7 @@ const Article = ({ article }) => {
           <span className="name">{actor.title}</span>
           {/* <span className="slogan">-</span> */}
           <span className="date">
-            10m •
+            {actor?.date.toDate().toLocaleDateString()}
             <img src="/images/main/worldCard-icon.svg" alt="World icon" />
           </span>
         </div>
