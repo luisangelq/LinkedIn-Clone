@@ -502,6 +502,7 @@ const RightButtons = styled.div`
     @media (max-width: 360px) {
       display: none;
     }
+  }
 
   .enabled {
     padding: 0.5rem 1rem;
