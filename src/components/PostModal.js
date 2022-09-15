@@ -79,7 +79,7 @@ const PostModal = (props) => {
       file.type === "image/jpeg" ||
       file.type === "image/gif"
     ) {
-      return <img src={URL.createObjectURL(shareFile.file)} />;
+      return <img src={URL.createObjectURL(shareFile.file)} alt="file-preview" />;
     }
 
     //Check for video type
@@ -212,34 +212,34 @@ const PostModal = (props) => {
                       setScreenFileType("video");
                     }}
                   >
-                    <img src="/images/modal/videoModal-icon.svg" alt="Photo" />
+                    <img src="/images/modal/videoModal-icon.svg" alt="video-icon" />
                   </button>
                   <button className="showPhone">
                     <img
                       src="/images/modal/documentModal-icon.svg"
-                      alt="Photo"
+                      alt="document-icon"
                     />
                   </button>
                   <button className="showPhone">
-                    <img src="/images/modal/jobModal-icon.svg" alt="Photo" />
+                    <img src="/images/modal/jobModal-icon.svg" alt="job-icon" />
                   </button>
                   <button className="showPhone">
                     <img
                       src="/images/modal/celebrateModal-icon.svg"
-                      alt="Photo"
+                      alt="celebrate-icon"
                     />
                   </button>
                   <button className="showPhone">
-                    <img src="/images/modal/graphPost-icon.svg" alt="Photo" />
+                    <img src="/images/modal/graphPost-icon.svg" alt="graph-icon" />
                   </button>
                   <button>
-                    <img src="/images/modal/dotsCard-icon.svg" alt="Photo" />
+                    <img src="/images/modal/dotsCard-icon.svg" alt="dots-icon" />
                   </button>
                 </LeftButtons>
 
                 <RightButtons>
                   <button className="showPhone">
-                    <img src="/images/modal/commentCard-icon.svg" alt="Photo" />
+                    <img src="/images/modal/commentCard-icon.svg" alt="comment-icon" />
                     Anyone
                   </button>
                   <button
